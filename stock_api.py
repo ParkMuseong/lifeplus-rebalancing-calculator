@@ -7,10 +7,14 @@
 from __future__ import annotations
 
 import datetime as _dt
+from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 import streamlit as st
+
+
+_KRX_CSV_PATH = Path(__file__).parent / "data" / "krx_listing.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -25,8 +29,24 @@ def _pick_col(df: pd.DataFrame, candidates: tuple[str, ...], fallback_idx: int =
 
 
 @st.cache_data(ttl=60 * 60 * 12, show_spinner=False)
-def load_krx_listing() -> pd.DataFrame:
-    """KOSPI + KOSDAQ + ETF 전체 종목 리스트를 반환한다."""
+def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
+    """KOSPI + KOSDAQ + ETF 전체 종목 리스트를 반환한다.
+
+    force_refresh=False이고 번들된 CSV(`data/krx_listing.csv`)가 존재하면
+    CSV에서 즉시 로드한다. CSV가 없거나 손상되었거나, 사용자가 강제 갱신을
+    요청하면 FinanceDataReader에서 새로 다운로드한다.
+    """
+    if not force_refresh and _KRX_CSV_PATH.exists():
+        try:
+            df = pd.read_csv(_KRX_CSV_PATH, dtype={"Code": str})
+            df["Code"] = df["Code"].astype(str).str.zfill(6)
+            df["Name"] = df["Name"].astype(str)
+            df["Market"] = df["Market"].astype(str)
+            if not df.empty:
+                return df.reset_index(drop=True)
+        except Exception:
+            pass
+
     import FinanceDataReader as fdr
 
     frames: list[pd.DataFrame] = []

@@ -126,8 +126,7 @@ def _status() -> tuple[str, str, str]:
 # ============================================================================
 # Load data
 # ============================================================================
-with st.spinner("종목 데이터를 불러오는 중"):
-    krx_df = load_krx_listing()
+krx_df = load_krx_listing()
 fx = get_usd_krw_rate()
 
 total_value = sum(
@@ -397,6 +396,18 @@ with main_col:
                             else:
                                 _add_holding(s["Market"], s["Code"], s["Name"], price, "KRW")
                                 st.rerun()
+
+                with st.expander("종목 리스트가 오래된 것 같다면? (신규 상장 종목 반영)", expanded=False):
+                    st.caption(
+                        "기본적으로 번들된 스냅샷에서 즉시 검색합니다. "
+                        "신규 상장·상장폐지 반영이 필요하면 아래 버튼으로 최신 KRX 리스트를 다시 받아옵니다 (15~30초 소요)."
+                    )
+                    if st.button("최신 KRX 종목 리스트 갱신", key="kr_refresh_listing"):
+                        load_krx_listing.clear()
+                        with st.spinner("최신 종목 리스트 다운로드 중"):
+                            load_krx_listing(force_refresh=True)
+                        st.success("종목 리스트가 갱신되었습니다.")
+                        st.rerun()
 
             with tab_us:
                 us_q = st.text_input(
