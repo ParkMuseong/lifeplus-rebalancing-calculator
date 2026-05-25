@@ -472,13 +472,13 @@ with main_col:
                 if cash_kind == "국채":
                     kb_q = st.text_input(
                         "① 국채 ETF 종목명 또는 코드 입력",
-                        placeholder="KODEX 국고채3년, TIGER 국고채30년액티브, 114260 등",
+                        placeholder="KODEX 국고채3년, TIGER 국고채30년, 114260 등",
                         key="kb_q",
                     )
                     if not kb_q:
                         st.markdown('<div class="quick-anchor"></div>', unsafe_allow_html=True)
                         st.markdown('<div class="search-empty__label">대표 국채 ETF — 클릭 대신 아래 키워드를 검색창에 입력</div>', unsafe_allow_html=True)
-                        kb_examples = ["KODEX 국고채3년", "KODEX 국고채10년", "TIGER 국고채30년액티브", "KOSEF 국고채10년", "KODEX 단기채권"]
+                        kb_examples = ["KODEX 국고채3년", "KODEX 국고채10년", "KODEX 국고채30년", "TIGER 국고채30년", "KODEX 단기채권"]
                         kb_chip_cols = st.columns(len(kb_examples))
                         for i, name in enumerate(kb_examples):
                             with kb_chip_cols[i]:
@@ -501,7 +501,7 @@ with main_col:
                         BOND_KW = ("국고채", "국채", "통안채", "단기채", "중기채", "장기채", "회사채", "크레딧채", "채권")
                         hits = [r for r in hits if any(k in str(r["Name"]) for k in BOND_KW)]
                         if not hits:
-                            st.info("국채 관련 ETF가 검색되지 않습니다. 예: KODEX 국고채3년, TIGER 국고채30년액티브")
+                            st.info("국채 관련 ETF가 검색되지 않습니다. 예: KODEX 국고채3년, TIGER 국고채30년")
                         else:
                             options = {f"{r['Name']}   ·   {r['Code']}   ·   {r['Market']}": r for r in hits}
                             sel = st.radio("② 추가할 국채 ETF 선택", list(options.keys()), key="kb_sel", index=0)
@@ -1118,19 +1118,9 @@ with main_col:
                                 "#d9b487", "#22b07e", "#8fc0e0", "#a07a4c", "#0e5a3e"],
                         line=dict(color=C.SURFACE, width=2),
                     ),
-                    textfont=dict(color=C.PRIMARY_INK, size=11, family="LIFEPLUS, sans-serif"),
-                    textinfo="percent",
-                    textposition="inside",
-                    insidetextorientation="radial",
+                    textinfo="none",
                     hovertemplate="<b>%{label}</b><br>₩%{value:,.0f}<br>%{percent}<extra></extra>",
                 )])
-                donut.add_annotation(
-                    text=f"<span style='font-size:11px;color:{C.MUTED};'>총자산</span><br>"
-                         f"<b style='color:{C.TEXT};font-size:20px;letter-spacing:-0.02em;'>₩{total_value/1e6:,.1f}M</b><br>"
-                         f"<span style='font-size:11px;color:{C.MUTED};'>{len(df_alloc)}개 종목</span>",
-                    x=0.5, y=0.5, showarrow=False,
-                    font=dict(family="LIFEPLUS, sans-serif", color=C.TEXT),
-                )
                 donut.update_layout(
                     showlegend=True,
                     legend=dict(orientation="v", x=1.02, y=0.5, yanchor="middle", font=dict(size=11)),
@@ -1361,7 +1351,7 @@ with main_col:
                             "목표 평가": "₩{:,.0f}",
                             "차액": "₩{:+,.0f}",
                         })
-                        .applymap(_style_action, subset=["액션"]),
+                        .map(_style_action, subset=["액션"]),
                     hide_index=True,
                     use_container_width=True,
                 )
