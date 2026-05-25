@@ -128,20 +128,40 @@ def search_kr_stocks(query: str, listing: pd.DataFrame, limit: int = 30) -> list
     return hits.head(limit).to_dict("records")
 
 
-@st.cache_data(ttl=60, show_spinner=False)
-def get_kr_price(code: str) -> Optional[float]:
-    """한국 종목 최근 종가."""
-    import FinanceDataReader as fdr
+_MARKET_SUFFIX = {"KOSPI": ".KS", "KOSDAQ": ".KQ"}
 
-    end = _dt.date.today()
-    start = end - _dt.timedelta(days=14)
+
+@st.cache_data(ttl=60, show_spinner=False)
+def get_kr_price(code: str, market: str = "") -> Optional[float]:
+    """한국 종목 최근 종가.
+
+    Streamlit Cloud 환경에서 FinanceDataReader가 KRX/Naver 접근에 실패하는 경우가
+    있어 yfinance(.KS/.KQ 접미사)를 먼저 시도하고, 실패 시 FDR로 폴백한다.
+    """
+    import yfinance as yf
+
+    suffix = _MARKET_SUFFIX.get(market.upper())
+    tickers = [f"{code}{suffix}"] if suffix else [f"{code}.KS", f"{code}.KQ"]
+
+    for ticker in tickers:
+        try:
+            hist = yf.Ticker(ticker).history(period="5d")
+            if hist is not None and not hist.empty:
+                return float(hist["Close"].iloc[-1])
+        except Exception:
+            continue
+
     try:
+        import FinanceDataReader as fdr
+
+        end = _dt.date.today()
+        start = end - _dt.timedelta(days=14)
         df = fdr.DataReader(code, start=start, end=end)
-        if df is None or df.empty:
-            return None
-        return float(df["Close"].iloc[-1])
+        if df is not None and not df.empty:
+            return float(df["Close"].iloc[-1])
     except Exception:
-        return None
+        pass
+    return None
 
 
 # ---------------------------------------------------------------------------

@@ -89,7 +89,7 @@ def _refresh_prices() -> None:
         if h["currency"] == "USD":
             p = get_us_price(h["code"])
         else:
-            p = get_kr_price(h["code"])
+            p = get_kr_price(h["code"], h.get("market", ""))
         if p is not None:
             h["price_native"] = float(p)
     st.session_state.last_sync = datetime.now()
@@ -368,7 +368,7 @@ with main_col:
                                 else:
                                     ex_s = ex_hits[0]
                                     with st.spinner("현재가 조회 중"):
-                                        ex_price = get_kr_price(ex_s["Code"])
+                                        ex_price = get_kr_price(ex_s["Code"], ex_s["Market"])
                                     if ex_price is None:
                                         st.error("현재가 조회에 실패했습니다.")
                                     else:
@@ -390,7 +390,7 @@ with main_col:
                         if st.button("③ 포트폴리오에 추가", key="kr_add", type="primary", use_container_width=True):
                             s = options[sel]
                             with st.spinner("현재가 조회 중"):
-                                price = get_kr_price(s["Code"])
+                                price = get_kr_price(s["Code"], s["Market"])
                             if price is None:
                                 st.error("현재가 조회에 실패했습니다.")
                             else:
@@ -489,7 +489,7 @@ with main_col:
                                     else:
                                         ex_s = ex_hits[0]
                                         with st.spinner("현재가 조회 중"):
-                                            ex_price = get_kr_price(ex_s["Code"])
+                                            ex_price = get_kr_price(ex_s["Code"], ex_s["Market"])
                                         if ex_price is None:
                                             st.error("현재가 조회에 실패했습니다.")
                                         else:
@@ -508,7 +508,7 @@ with main_col:
                             if st.button("③ 포트폴리오에 추가", key="kb_add", type="primary", use_container_width=True):
                                 s = options[sel]
                                 with st.spinner("현재가 조회 중"):
-                                    price = get_kr_price(s["Code"])
+                                    price = get_kr_price(s["Code"], s["Market"])
                                 if price is None:
                                     st.error("현재가 조회에 실패했습니다.")
                                 else:
