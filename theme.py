@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 # Font loader — LIFEPLUS OTF (Bold / Medium / Light)
 # 위계 매핑: Bold(700) = 타이틀·강조 / Medium(500) = 본문·라벨 / Light(300) = 부제
 # ============================================================================
-_FONT_DIR = Path(r"C:\Users\한화손해보험\VS CODE\글씨체")
+_FONT_DIR = Path(__file__).parent / "assets" / "fonts"
 _FONT_FILES = {
     300: "LIFEPLUS OTF Light.otf",
     500: "LIFEPLUS OTF Medium.otf",

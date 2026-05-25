@@ -27,5 +27,5 @@ Thumbs.db
 *.swp
 *.swo
 
-# Image / motion assets (저작권·용량 문제 ─ 로컬에서만 사용)
+# Local-only assets
 에시 이미지.png

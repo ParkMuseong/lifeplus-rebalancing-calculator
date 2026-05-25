@@ -24,7 +24,8 @@ def _load_image_b64(path: str) -> str:
         return ""
 
 
-LIFEPLUS_LOGO_B64 = _load_image_b64(r"C:\Users\한화손해보험\VS CODE\이미지\LIFEPLUS_LOGO_가로.png")
+_ASSETS_DIR = Path(__file__).parent / "assets"
+LIFEPLUS_LOGO_B64 = _load_image_b64(str(_ASSETS_DIR / "images" / "LIFEPLUS_LOGO_가로.png"))
 
 
 @st.cache_data(show_spinner=False)
@@ -35,7 +36,7 @@ def _load_video_b64(path: str) -> str:
         return ""
 
 
-LIFEPLUS_MOTION_B64 = _load_video_b64(r"C:\Users\한화손해보험\VS CODE\이미지\LIFEPLUS_MOTION_3sec.mp4")
+LIFEPLUS_MOTION_B64 = _load_video_b64(str(_ASSETS_DIR / "video" / "LIFEPLUS_MOTION_3sec.mp4"))
 
 from stock_api import (
     get_kr_price,
