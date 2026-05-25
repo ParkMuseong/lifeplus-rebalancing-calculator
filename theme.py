@@ -3134,7 +3134,7 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     background: rgba(255,255,255,0.025) !important;
     border: 1px solid {C.BORDER} !important;
     color: {C.MUTED_DEEP} !important;
-    font-size: 32px !important;
+    font-size: 26px !important;
     font-weight: 400 !important;
     padding: 0 !important;
     height: 36px !important;
@@ -3163,7 +3163,7 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 32px !important;
+    font-size: 26px !important;
     font-weight: 400 !important;
 }}
 
@@ -3172,7 +3172,7 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
 [class*="st-key-_del_"] button *,
 [class*="st-key-_del_"] button p,
 [class*="st-key-_del_"] button [data-testid="stMarkdownContainer"] p {{
-    font-size: 32px !important;
+    font-size: 26px !important;
     font-weight: 400 !important;
     line-height: 1 !important;
 }}
