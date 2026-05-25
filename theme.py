@@ -3150,7 +3150,7 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     text-align: center !important;
     transition: all 0.18s var(--ease);
 }}
-/* Streamlit 버튼 내부 <div><p> 마진/패딩 제거 ── ✕ 문자가 정확히 중앙에 오도록 */
+/* Streamlit 버튼 내부 <div><p> 마진/패딩 제거 + 폰트 크기 강제 ── × 문자가 정확히 중앙에 24px로 오도록 */
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button > div,
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button > div > p,
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button [data-testid="stMarkdownContainer"],
@@ -3163,6 +3163,8 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    font-size: 24px !important;
+    font-weight: 400 !important;
 }}
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button:hover {{
     background: rgba(196,84,98,0.14) !important;
