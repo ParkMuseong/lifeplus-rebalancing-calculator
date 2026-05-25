@@ -3134,8 +3134,8 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     background: rgba(255,255,255,0.025) !important;
     border: 1px solid {C.BORDER} !important;
     color: {C.MUTED_DEEP} !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
     padding: 0 !important;
     height: 30px !important;
     min-height: 30px !important;
