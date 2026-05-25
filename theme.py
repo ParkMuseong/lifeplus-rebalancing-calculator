@@ -3134,13 +3134,13 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     background: rgba(255,255,255,0.025) !important;
     border: 1px solid {C.BORDER} !important;
     color: {C.MUTED_DEEP} !important;
-    font-size: 24px !important;
+    font-size: 32px !important;
     font-weight: 400 !important;
     padding: 0 !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    width: 30px !important;
-    min-width: 30px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    width: 36px !important;
+    min-width: 36px !important;
     border-radius: 7px !important;
     box-shadow: none !important;
     line-height: 1 !important;
@@ -3150,7 +3150,7 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     text-align: center !important;
     transition: all 0.18s var(--ease);
 }}
-/* Streamlit 버튼 내부 <div><p> 마진/패딩 제거 + 폰트 크기 강제 ── × 문자가 정확히 중앙에 24px로 오도록 */
+/* Streamlit 버튼 내부 <div><p> 마진/패딩 제거 + 폰트 크기 강제 ── × 문자가 정확히 중앙에 32px로 오도록 */
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button > div,
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button > div > p,
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button [data-testid="stMarkdownContainer"],
@@ -3163,8 +3163,24 @@ hr {{ border: none; border-top: 1px solid {C.BORDER}; margin: 1.75rem 0 !importa
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 24px !important;
+    font-size: 32px !important;
     font-weight: 400 !important;
+}}
+
+/* :has() 미지원 환경 대비 — Streamlit이 버튼 key별로 부여하는 클래스로 직접 타겟 */
+[class*="st-key-_del_"] button,
+[class*="st-key-_del_"] button *,
+[class*="st-key-_del_"] button p,
+[class*="st-key-_del_"] button [data-testid="stMarkdownContainer"] p {{
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+}}
+[class*="st-key-_del_"] button {{
+    height: 36px !important;
+    min-height: 36px !important;
+    width: 36px !important;
+    min-width: 36px !important;
 }}
 [data-testid="stVerticalBlockBorderWrapper"]:has(.hc-head) [data-testid="stHorizontalBlock"]:first-of-type .stButton button:hover {{
     background: rgba(196,84,98,0.14) !important;
