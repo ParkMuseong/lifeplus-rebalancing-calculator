@@ -723,7 +723,7 @@ with main_col:
                             </div>
                             """, unsafe_allow_html=True)
                         with head_r:
-                            if st.button("✕", key=f"_del_{code}", help="이 종목 삭제"):
+                            if st.button("×", key=f"_del_{code}", help="이 종목 삭제"):
                                 st.session_state.holdings = [x for x in st.session_state.holdings if x["code"] != code]
                                 st.rerun()
 
@@ -835,7 +835,16 @@ with main_col:
                       try {{
                           var win = window.parent || window;
                           var doc = win.document;
-                          win.scrollTo({{ top: 0, behavior: 'instant' }});
+                          // 1) window 스크롤 + 2) Streamlit 자체 스크롤 컨테이너(stMain/stAppViewContainer)도 같이 0으로
+                          try {{ win.scrollTo({{ top: 0, behavior: 'instant' }}); }} catch(e) {{ win.scrollTo(0, 0); }}
+                          ['section[data-testid="stMain"]', '[data-testid="stAppViewContainer"]', '[data-testid="stMainBlockContainer"]'].forEach(function(sel) {{
+                              var el = doc.querySelector(sel);
+                              if (el && typeof el.scrollTo === 'function') {{
+                                  try {{ el.scrollTo({{ top: 0, behavior: 'instant' }}); }} catch(e) {{ el.scrollTop = 0; }}
+                              }} else if (el) {{
+                                  el.scrollTop = 0;
+                              }}
+                          }});
 
                           // 기존 오버레이 정리
                           var prev = doc.getElementById('lifeplus-motion-overlay');
@@ -996,7 +1005,16 @@ with main_col:
                   (function(){
                       try {
                           var win = window.parent || window;
-                          win.scrollTo({ top: 0, behavior: 'smooth' });
+                          var doc = win.document;
+                          try { win.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { win.scrollTo(0, 0); }
+                          ['section[data-testid="stMain"]', '[data-testid="stAppViewContainer"]', '[data-testid="stMainBlockContainer"]'].forEach(function(sel) {
+                              var el = doc.querySelector(sel);
+                              if (el && typeof el.scrollTo === 'function') {
+                                  try { el.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { el.scrollTop = 0; }
+                              } else if (el) {
+                                  el.scrollTop = 0;
+                              }
+                          });
                       } catch (e) {}
                   })();
                 </script>
