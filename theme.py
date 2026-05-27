@@ -534,99 +534,75 @@ html, body {{
     display: flex; flex-direction: column; gap: 0;
 }}
 .app-eyebrow {{
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 10px;
+    display: inline-block;
+    font-size: 10.5px;
     font-weight: 700;
     color: {C.MUTED};
-    letter-spacing: 0.32em;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     font-family: var(--font-sans);
 }}
-.app-eyebrow::before {{
-    content: '';
-    width: 32px; height: 1px;
-    background: linear-gradient(90deg, {C.PRIMARY_HOVER}, {C.BORDER_STRONG});
-}}
-.app-eyebrow::after {{
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: {C.PRIMARY_HOVER};
-    box-shadow: 0 0 10px {C.PRIMARY_HOVER};
-}}
 .app-title {{
-    font-size: 48px;
+    font-size: 44px;
     font-weight: 800;
     color: {C.TEXT};
-    letter-spacing: -0.04em;
+    letter-spacing: -0.038em;
     line-height: 1.0;
     margin: 0;
     font-family: var(--font-sans);
-    background: linear-gradient(180deg, {C.TEXT} 0%, #b8c7c0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }}
 .app-title .accent {{
-    background: linear-gradient(180deg, {C.PRIMARY_BRIGHT} 0%, {C.PRIMARY_HOVER} 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: {C.PRIMARY_HOVER};
     font-weight: 800;
 }}
 .app-subtitle {{
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    margin-top: 10px;
-    padding: 5px 13px 5px 11px;
-    background: {C.PRIMARY_SOFT};
-    border: 1px solid {C.BORDER_PRIMARY};
-    border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: {C.PRIMARY_HOVER};
-    letter-spacing: 0.12em;
-    line-height: 1;
-    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 14px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: {C.MUTED};
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    text-transform: none;
     font-family: var(--font-sans);
 }}
-.app-subtitle::before {{
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: {C.PRIMARY_HOVER};
-    box-shadow: 0 0 0 3px rgba(28,158,110,0.16), 0 0 10px {C.PRIMARY_HOVER};
-    flex-shrink: 0;
-}}
 .app-meta {{
-    display: flex;
-    gap: 10px;
+    display: inline-flex;
     align-items: stretch;
-    flex-wrap: wrap;
+    gap: 0;
+    flex-wrap: nowrap;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.012) 0%, transparent 100%),
+        {C.SURFACE};
+    border: 1px solid {C.BORDER};
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--inset-line), var(--shadow-sm);
 }}
 .app-meta-item {{
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 4px;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,0.012) 0%, transparent 100%),
-        {C.SURFACE};
-    border: 1px solid {C.BORDER};
-    border-radius: var(--radius-lg);
-    padding: 13px 20px;
-    min-width: 150px;
-    transition: border-color 0.22s var(--ease), transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
-    box-shadow: var(--inset-line), var(--shadow-sm);
+    padding: 12px 22px;
+    min-width: 140px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
+}}
+.app-meta-item + .app-meta-item {{
+    border-left: 1px solid {C.BORDER};
 }}
 .app-meta-item:hover {{
-    border-color: {C.BORDER_STRONG};
-    transform: translateY(-1px);
-    box-shadow: var(--inset-line), var(--shadow-md);
+    transform: none;
+    box-shadow: none;
 }}
 .app-meta-label {{
     font-size: 9.5px;
@@ -639,9 +615,9 @@ html, body {{
 .app-meta-value {{
     color: {C.TEXT};
     font-weight: 700;
-    font-size: 17px;
+    font-size: 16.5px;
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.022em;
     line-height: 1.15;
     margin-top: 3px;
     font-family: var(--font-sans);
@@ -859,10 +835,10 @@ html, body {{
 }}
 .kpi-card.primary .kpi-label::after {{ background: {C.BORDER_PRIMARY}; }}
 .kpi-value {{
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     color: {C.TEXT};
-    letter-spacing: -0.035em;
+    letter-spacing: -0.032em;
     line-height: 1.05;
     font-variant-numeric: tabular-nums;
     margin-top: 10px;
