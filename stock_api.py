@@ -114,27 +114,45 @@ def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
 
     # 강제 갱신으로 새로 받은 결과는 번들 CSV에 덮어써서, 이후 기본 호출
     # (force_refresh=False) 도 동일한 최신 데이터를 보도록 한다.
+    # 단, 부분 실패(예: KOSPI fetch 실패로 ETF만 들어있는 상태) 시에는
+    # 삼성전자/SK하이닉스 같은 핵심 종목이 사라지므로 덮어쓰지 않는다.
     if force_refresh:
-        try:
-            _KRX_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
-            merged.to_csv(_KRX_CSV_PATH, index=False, encoding="utf-8-sig")
-        except Exception:
-            pass
+        markets = set(merged["Market"].unique())
+        sane = (
+            "KOSPI" in markets
+            and "KOSDAQ" in markets
+            and len(merged) >= 1000
+        )
+        if sane:
+            try:
+                _KRX_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+                merged.to_csv(_KRX_CSV_PATH, index=False, encoding="utf-8-sig")
+            except Exception:
+                pass
 
     return merged
 
 
 def search_kr_stocks(query: str, listing: pd.DataFrame, limit: int = 30) -> list[dict]:
-    """이름 또는 코드 일부로 한국 종목 검색 (주식 + ETF)."""
+    """이름 또는 코드 일부로 한국 종목 검색 (주식 + ETF).
+
+    우선순위:
+      1) 이름 완전 일치 ── "삼성전자" 검색 시 005930 삼성전자가 무조건 최상단
+      2) 이름이 검색어로 시작
+      3) 그 외 부분 일치 (검색어를 포함만 하는 ETF 등)
+    """
     if not query:
         return []
     q = query.strip()
+    q_lower = q.lower()
     name_mask = listing["Name"].str.contains(q, case=False, na=False, regex=False)
     code_mask = listing["Code"].str.contains(q, na=False, regex=False)
     hits = listing[name_mask | code_mask]
-    # 이름이 검색어로 시작하는 항목을 우선 노출
-    starts = hits["Name"].str.lower().str.startswith(q.lower(), na=False)
-    hits = pd.concat([hits[starts], hits[~starts]], ignore_index=True)
+    name_lower = hits["Name"].str.lower()
+    exact = name_lower == q_lower
+    starts = name_lower.str.startswith(q_lower, na=False) & ~exact
+    other = ~(exact | starts)
+    hits = pd.concat([hits[exact], hits[starts], hits[other]], ignore_index=True)
     return hits.head(limit).to_dict("records")
 
 
