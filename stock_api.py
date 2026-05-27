@@ -110,8 +110,18 @@ def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
 
     merged = pd.concat(frames, ignore_index=True)
     # 동일 코드가 여러 시장으로 중복될 경우 최초 등장만 유지 (KOSPI 우선)
-    merged = merged.drop_duplicates(subset=["Code"], keep="first")
-    return merged.reset_index(drop=True)
+    merged = merged.drop_duplicates(subset=["Code"], keep="first").reset_index(drop=True)
+
+    # 강제 갱신으로 새로 받은 결과는 번들 CSV에 덮어써서, 이후 기본 호출
+    # (force_refresh=False) 도 동일한 최신 데이터를 보도록 한다.
+    if force_refresh:
+        try:
+            _KRX_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+            merged.to_csv(_KRX_CSV_PATH, index=False, encoding="utf-8-sig")
+        except Exception:
+            pass
+
+    return merged
 
 
 def search_kr_stocks(query: str, listing: pd.DataFrame, limit: int = 30) -> list[dict]:
