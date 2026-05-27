@@ -648,6 +648,110 @@ html, body {{
 }}
 
 /* ============================================================================
+   App header — container 기반 레이아웃 (st.container(key="app_header"))
+   좌측: 브랜드 / 우측: 동기화 버튼 위, 메타 카드 아래 세로 스택
+============================================================================ */
+[class*="st-key-app_header"] {{
+    margin-bottom: 40px;
+    padding: 8px 0 32px;
+    border-bottom: 1px solid {C.BORDER};
+    position: relative;
+}}
+[class*="st-key-app_header"]::after {{
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 64px; height: 1px;
+    background: linear-gradient(90deg, {C.PRIMARY_HOVER}, transparent);
+}}
+[class*="st-key-app_header"] > [data-testid="stHorizontalBlock"] {{
+    align-items: flex-end;
+}}
+/* 우측 컬럼 stack ─ 버튼(위) + 메타 카드(아래) 우측 정렬 */
+[class*="st-key-app_header_right"] {{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 12px !important;
+}}
+[class*="st-key-app_header_right"] .app-meta {{
+    margin: 0;
+}}
+
+/* ============================================================================
+   환율·현재가 동기화 버튼 ─ app-meta-item 결의 인터랙티브 카드
+   - 톤: SURFACE 표면 + BORDER + 작은 대문자 라벨 + tabular numerics
+   - 아이콘: 좌측 refresh-cw SVG (emerald), 호버 시 180° 회전 + glow
+   - 호버: 살짝 lift, primary border, primary glow
+============================================================================ */
+[class*="st-key-sync_prices_fx"] {{
+    width: auto !important;
+    flex: 0 0 auto !important;
+}}
+[class*="st-key-sync_prices_fx"] button {{
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.012) 0%, transparent 100%),
+        {C.SURFACE} !important;
+    border: 1px solid {C.BORDER} !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 10px 18px 10px 14px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    color: {C.MUTED} !important;
+    font-family: var(--font-sans) !important;
+    box-shadow: var(--inset-line), var(--shadow-sm) !important;
+    transition:
+        border-color 0.22s var(--ease),
+        color 0.22s var(--ease),
+        background 0.22s var(--ease),
+        transform 0.22s var(--ease),
+        box-shadow 0.22s var(--ease) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+}}
+[class*="st-key-sync_prices_fx"] button::before {{
+    content: '';
+    width: 13px;
+    height: 13px;
+    margin-right: 10px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322b07e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/><path d='M3 3v5h5'/><path d='M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16'/><path d='M16 16h5v5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    display: inline-block;
+    flex-shrink: 0;
+    transition: transform 0.5s var(--ease), filter 0.22s var(--ease);
+}}
+[class*="st-key-sync_prices_fx"] button:hover {{
+    border-color: {C.BORDER_PRIMARY} !important;
+    color: {C.PRIMARY_HOVER} !important;
+    background:
+        linear-gradient(180deg, rgba(28,158,110,0.05) 0%, transparent 100%),
+        {C.SURFACE} !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--inset-primary), var(--shadow-md) !important;
+}}
+[class*="st-key-sync_prices_fx"] button:hover::before {{
+    transform: rotate(180deg);
+    filter: drop-shadow(0 0 8px rgba(94,224,165,0.55));
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ee0a5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/><path d='M3 3v5h5'/><path d='M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16'/><path d='M16 16h5v5'/></svg>");
+}}
+[class*="st-key-sync_prices_fx"] button:active {{
+    transform: translateY(0) !important;
+    box-shadow: var(--inset-line), var(--shadow-sm) !important;
+}}
+[class*="st-key-sync_prices_fx"] button:focus-visible {{
+    outline: none !important;
+    border-color: {C.PRIMARY_HOVER} !important;
+    box-shadow: var(--inset-primary), 0 0 0 3px {C.PRIMARY_GLOW} !important;
+}}
+
+/* ============================================================================
    KPI cards — premium dashboard tiles
 ============================================================================ */
 .kpi-grid {{

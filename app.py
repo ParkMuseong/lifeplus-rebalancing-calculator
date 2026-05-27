@@ -264,42 +264,44 @@ with left_col:
 
 with main_col:
     # ========================================================================
-    # App header
+    # App header  ── 좌: 브랜드 / 우: 동기화 버튼 위 + 메타 카드 아래 스택
     # ========================================================================
-    st.markdown(f"""
-    <div class="app-header">
-      <div class="app-brand">
-        <span class="app-eyebrow">Dashboard</span>
-        <h1 class="app-title">MY Portfolio</h1>
-        <div class="app-subtitle">LIFEPLUS Rebalancing Calculator</div>
-      </div>
-      <div class="app-meta">
-        <div class="app-meta-item">
-          <div class="app-meta-label">USD / KRW</div>
-          <div class="app-meta-value">₩{fx:,.2f}</div>
-        </div>
-        <div class="app-meta-item">
-          <div class="app-meta-label">최근 동기화</div>
-          <div class="app-meta-value">{sync_time}</div>
-        </div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    _sync_l, _sync_r = st.columns([5, 1])
-    with _sync_r:
-        if st.button(
-            "🔄 환율·현재가 동기화",
-            key="sync_prices_fx",
-            use_container_width=True,
-            help="USD/KRW 환율과 모든 보유 종목 현재가를 다시 가져옵니다",
-        ):
-            get_usd_krw_rate.clear()
-            get_kr_price.clear()
-            get_us_price.clear()
-            _refresh_prices()
-            st.toast("환율·현재가를 갱신했습니다")
-            st.rerun()
+    with st.container(key="app_header"):
+        _h_l, _h_r = st.columns([1.55, 1])
+        with _h_l:
+            st.markdown(f"""
+            <div class="app-brand">
+              <span class="app-eyebrow">Dashboard</span>
+              <h1 class="app-title">MY Portfolio</h1>
+              <div class="app-subtitle">LIFEPLUS Rebalancing Calculator</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with _h_r:
+            with st.container(key="app_header_right"):
+                if st.button(
+                    "환율·현재가 동기화",
+                    key="sync_prices_fx",
+                    use_container_width=False,
+                    help="USD/KRW 환율과 모든 보유 종목 현재가를 다시 가져옵니다",
+                ):
+                    get_usd_krw_rate.clear()
+                    get_kr_price.clear()
+                    get_us_price.clear()
+                    _refresh_prices()
+                    st.toast("환율·현재가를 갱신했습니다")
+                    st.rerun()
+                st.markdown(f"""
+                <div class="app-meta">
+                  <div class="app-meta-item">
+                    <div class="app-meta-label">USD / KRW</div>
+                    <div class="app-meta-value">₩{fx:,.2f}</div>
+                  </div>
+                  <div class="app-meta-item">
+                    <div class="app-meta-label">최근 동기화</div>
+                    <div class="app-meta-value">{sync_time}</div>
+                  </div>
+                </div>
+                """, unsafe_allow_html=True)
 
     # ========================================================================
     # KPI cards
