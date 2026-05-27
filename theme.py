@@ -661,7 +661,7 @@ html, body {{
 ============================================================================ */
 [class*="st-key-app_header"] {{
     margin-bottom: 40px;
-    padding: 8px 0 16px;
+    padding: 8px 0 0;
     position: relative;
 }}
 [class*="st-key-app_header"]::after {{
@@ -695,14 +695,16 @@ html, body {{
     flex-shrink: 0;
 }}
 [class*="st-key-app_header"] > [data-testid="stHorizontalBlock"] {{
-    align-items: flex-end;
+    align-items: flex-start;
 }}
-/* 우측 컬럼 stack ─ 버튼(위) + 메타 박스(아래), 둘 다 컬럼 너비 100% 채워 가로 크기 통일 */
+/* 우측 컬럼 stack ─ 버튼(위) + 메타 박스(아래), 둘 다 컬럼 너비 100% 채워 가로 크기 통일
+   padding-top: eyebrow("DASHBOARD") 높이 + margin-bottom 만큼 내려 버튼 상단을 .app-title 상단과 정렬 */
 [class*="st-key-app_header_right"] {{
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 12px !important;
+    padding-top: 32px !important;
 }}
 [class*="st-key-app_header_right"] .app-meta {{
     margin: 0;
