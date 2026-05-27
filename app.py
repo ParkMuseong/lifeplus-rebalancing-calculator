@@ -189,7 +189,7 @@ with left_col:
     st.markdown("""
     <div class="sb">
       <span class="sb__eyebrow">Behind the Scenes</span>
-      <h3>백엔드 처리 흐름</h3>
+      <h3>Processing Pipeline</h3>
       <p class="sb__subtitle"><span style="white-space:nowrap;">입력 즉시 자동으로 수행되는</span><br><b>7단계 처리 프로세스</b></p>
 
       <div class="sb__metrics">
