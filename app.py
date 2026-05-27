@@ -10,6 +10,9 @@ import json
 import math
 from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+KST = ZoneInfo("Asia/Seoul")
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -64,7 +67,7 @@ st.markdown(CSS, unsafe_allow_html=True)
 if "holdings" not in st.session_state:
     st.session_state.holdings: list[dict] = []
 if "last_sync" not in st.session_state:
-    st.session_state.last_sync = datetime.now()
+    st.session_state.last_sync = datetime.now(KST)
 
 
 def _to_krw(price_native: float, currency: str, fx: float) -> float:
@@ -92,7 +95,7 @@ def _refresh_prices() -> None:
             p = get_kr_price(h["code"], h.get("market", ""))
         if p is not None:
             h["price_native"] = float(p)
-    st.session_state.last_sync = datetime.now()
+    st.session_state.last_sync = datetime.now(KST)
 
 
 def _status() -> tuple[str, str, str]:
@@ -282,6 +285,21 @@ with main_col:
       </div>
     </div>
     """, unsafe_allow_html=True)
+
+    _sync_l, _sync_r = st.columns([5, 1])
+    with _sync_r:
+        if st.button(
+            "🔄 환율·현재가 동기화",
+            key="sync_prices_fx",
+            use_container_width=True,
+            help="USD/KRW 환율과 모든 보유 종목 현재가를 다시 가져옵니다",
+        ):
+            get_usd_krw_rate.clear()
+            get_kr_price.clear()
+            get_us_price.clear()
+            _refresh_prices()
+            st.toast("환율·현재가를 갱신했습니다")
+            st.rerun()
 
     # ========================================================================
     # KPI cards
