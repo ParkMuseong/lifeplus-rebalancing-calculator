@@ -633,6 +633,13 @@ html, body {{
     border-bottom: 1px solid {C.BORDER};
     position: relative;
 }}
+[class*="st-key-app_header"]::after {{
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 64px; height: 1px;
+    background: linear-gradient(90deg, {C.PRIMARY_HOVER}, transparent);
+}}
 [class*="st-key-app_header"] > [data-testid="stHorizontalBlock"] {{
     align-items: flex-end;
 }}
