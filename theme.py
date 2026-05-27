@@ -544,10 +544,10 @@ html, body {{
     font-family: var(--font-sans);
 }}
 .app-title {{
-    font-size: 44px;
+    font-size: 52px;
     font-weight: 800;
     color: {C.TEXT};
-    letter-spacing: -0.038em;
+    letter-spacing: -0.04em;
     line-height: 1.0;
     margin: 0;
     font-family: var(--font-sans);
@@ -629,29 +629,28 @@ html, body {{
 ============================================================================ */
 [class*="st-key-app_header"] {{
     margin-bottom: 40px;
-    padding: 8px 0 32px;
+    padding: 8px 0 16px;
     border-bottom: 1px solid {C.BORDER};
     position: relative;
-}}
-[class*="st-key-app_header"]::after {{
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 0;
-    width: 64px; height: 1px;
-    background: linear-gradient(90deg, {C.PRIMARY_HOVER}, transparent);
 }}
 [class*="st-key-app_header"] > [data-testid="stHorizontalBlock"] {{
     align-items: flex-end;
 }}
-/* 우측 컬럼 stack ─ 버튼(위) + 메타 카드(아래) 우측 정렬 */
+/* 우측 컬럼 stack ─ 버튼(위) + 메타 박스(아래), 둘 다 컬럼 너비 100% 채워 가로 크기 통일 */
 [class*="st-key-app_header_right"] {{
     display: flex !important;
     flex-direction: column !important;
-    align-items: flex-end !important;
+    align-items: stretch !important;
     gap: 12px !important;
 }}
 [class*="st-key-app_header_right"] .app-meta {{
     margin: 0;
+    display: flex;
+    width: 100%;
+}}
+[class*="st-key-app_header_right"] .app-meta-item {{
+    flex: 1 1 0;
+    min-width: 0;
 }}
 
 /* ============================================================================
@@ -661,8 +660,8 @@ html, body {{
    - 호버: 살짝 lift, primary border, primary glow
 ============================================================================ */
 [class*="st-key-sync_prices_fx"] {{
-    width: auto !important;
-    flex: 0 0 auto !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
 }}
 [class*="st-key-sync_prices_fx"] button {{
     background:
@@ -673,6 +672,7 @@ html, body {{
     padding: 10px 18px 10px 14px !important;
     min-height: 0 !important;
     height: auto !important;
+    width: 100% !important;
     font-size: 10.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.18em !important;
@@ -686,8 +686,9 @@ html, body {{
         background 0.22s var(--ease),
         transform 0.22s var(--ease),
         box-shadow 0.22s var(--ease) !important;
-    display: inline-flex !important;
+    display: flex !important;
     align-items: center !important;
+    justify-content: center !important;
     gap: 0 !important;
 }}
 [class*="st-key-sync_prices_fx"] button::before {{
