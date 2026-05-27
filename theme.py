@@ -869,7 +869,7 @@ html, body {{
     font-family: var(--font-sans);
 }}
 .kpi-card.primary .kpi-value {{
-    font-size: 34px;
+    font-size: 28px;
     color: {C.TEXT};
     font-weight: 800;
     background: linear-gradient(180deg, {C.TEXT} 0%, #d0dcd5 100%);
