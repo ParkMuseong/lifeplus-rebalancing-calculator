@@ -28,6 +28,40 @@ def _pick_col(df: pd.DataFrame, candidates: tuple[str, ...], fallback_idx: int =
     return df.columns[fallback_idx]
 
 
+def _fetch_krx_etn() -> pd.DataFrame:
+    """KRX 상장 ETN 전종목 (단일종목 레버리지/인버스 ETN 등).
+
+    FinanceDataReader는 ETN 리스트를 제공하지 않으므로, KRX 데이터시스템의
+    finder 엔드포인트(증권상품 검색)에서 mktsel=ETN 으로 직접 받아온다.
+    실패 시 빈 DataFrame을 반환한다.
+    """
+    import requests
+
+    url = "http://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd"
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://data.krx.co.kr/contents/MDC/MDI/outerLoader/index.cmd",
+    }
+    data = {
+        "bld": "dbms/comm/finder/finder_secuprodisu",
+        "mktsel": "ETN",
+        "locale": "ko_KR",
+    }
+    try:
+        r = requests.post(url, data=data, headers=headers, timeout=20)
+        rows = r.json().get("block1", [])
+    except Exception:
+        return pd.DataFrame(columns=["Code", "Name", "Market"])
+    if not rows:
+        return pd.DataFrame(columns=["Code", "Name", "Market"])
+    df = pd.DataFrame(rows)
+    return pd.DataFrame({
+        "Code": df["short_code"].astype(str).str.zfill(6),
+        "Name": df["codeName"].astype(str),
+        "Market": "ETN",
+    })
+
+
 @st.cache_data(ttl=60 * 60 * 12, show_spinner=False)
 def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
     """KOSPI + KOSDAQ + ETF 전체 종목 리스트를 반환한다.
@@ -104,6 +138,11 @@ def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
             frames.append(extra)
         except Exception:
             pass
+
+    # 4) ETN (단일종목 레버리지/인버스 ETN 등) ── KRX finder 엔드포인트
+    etn = _fetch_krx_etn()
+    if not etn.empty:
+        frames.append(etn)
 
     if not frames:
         return pd.DataFrame(columns=["Code", "Name", "Market"])
