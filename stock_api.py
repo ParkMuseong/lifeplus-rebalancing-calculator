@@ -136,21 +136,44 @@ def load_krx_listing(force_refresh: bool = False) -> pd.DataFrame:
 def search_kr_stocks(query: str, listing: pd.DataFrame, limit: int = 30) -> list[dict]:
     """이름 또는 코드 일부로 한국 종목 검색 (주식 + ETF).
 
+    검색어를 공백 기준으로 토큰화해, 각 토큰이 모두 종목명에 포함되면 매칭한다.
+    이렇게 하면 띄어쓰기·단어 순서가 실제 종목명과 달라도 찾을 수 있다.
+    예) "삼성전자 레버리지" 또는 "삼성전자단일종목 레버리지"
+        → "KODEX 삼성전자단일종목레버리지" 매칭
+
     우선순위:
       1) 이름 완전 일치 ── "삼성전자" 검색 시 005930 삼성전자가 무조건 최상단
       2) 이름이 검색어로 시작
-      3) 그 외 부분 일치 (검색어를 포함만 하는 ETF 등)
+      3) 그 외 부분 일치 (모든 토큰을 포함하는 ETF 등)
     """
     if not query:
         return []
     q = query.strip()
     q_lower = q.lower()
-    name_mask = listing["Name"].str.contains(q, case=False, na=False, regex=False)
-    code_mask = listing["Code"].str.contains(q, na=False, regex=False)
+    q_nospace = q_lower.replace(" ", "")
+    tokens = [t for t in q_lower.split() if t]
+
+    names_lower = listing["Name"].str.lower()
+    if tokens:
+        name_mask = pd.Series(True, index=listing.index)
+        for t in tokens:
+            name_mask &= names_lower.str.contains(t, na=False, regex=False)
+    else:
+        name_mask = pd.Series(False, index=listing.index)
+    code_mask = (
+        listing["Code"].str.contains(q_nospace, na=False, regex=False)
+        if q_nospace
+        else pd.Series(False, index=listing.index)
+    )
+
     hits = listing[name_mask | code_mask]
     name_lower = hits["Name"].str.lower()
-    exact = name_lower == q_lower
-    starts = name_lower.str.startswith(q_lower, na=False) & ~exact
+    name_nospace = name_lower.str.replace(" ", "", regex=False)
+    exact = (name_lower == q_lower) | (name_nospace == q_nospace)
+    starts = (
+        name_lower.str.startswith(q_lower, na=False)
+        | name_nospace.str.startswith(q_nospace, na=False)
+    ) & ~exact
     other = ~(exact | starts)
     hits = pd.concat([hits[exact], hits[starts], hits[other]], ignore_index=True)
     return hits.head(limit).to_dict("records")
